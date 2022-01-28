@@ -14,5 +14,8 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-http-spray-json" % akkaHttpVersion,
   "com.typesafe.akka" %% "akka-http" % akkaHttpVersion,
   "de.heikoseeberger" %% "akka-http-circe" % akkaHttpJsonSerializersVersion,
-  "de.heikoseeberger" %% "akka-http-jackson" % akkaHttpJsonSerializersVersion
+  "de.heikoseeberger" %% "akka-http-jackson" % akkaHttpJsonSerializersVersion,
+  "io.circe" %% "circe-core" % circeVersion,
+  "io.circe" %% "circe-generic" % circeVersion,
+  "io.circe" %% "circe-parser" % circeVersion
 )

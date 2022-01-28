@@ -6,6 +6,8 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import de.heikoseeberger.akkahttpcirce.FailFastCirceSupport
+import de.heikoseeberger.akkahttpjackson.JacksonSupport
 
 import java.util.UUID
 
@@ -25,7 +27,7 @@ trait PersonJsonProtocol extends DefaultJsonProtocol {
 //spray 3
 object AkkaHttpSpray extends PersonJsonProtocol with SprayJsonSupport {
 
-  implicit val system = ActorSystem(Behaviors.empty, "AkkaHttpJSON")
+  implicit val system = ActorSystem(Behaviors.empty, "AkkaHttpSpray")
 
   val route: Route = (path("api" / "users") & post) {
     entity(as[Person]) { person: Person =>
@@ -36,6 +38,23 @@ object AkkaHttpSpray extends PersonJsonProtocol with SprayJsonSupport {
 
   def main(args: Array[String]): Unit = {
     Http().newServerAt("localhost", 8766).bind(route)
+  }
+
+}
+
+object AkkaHttpCirce extends FailFastCirceSupport {
+  import io.circe.generic.auto._ //implicit encoders/decoders
+
+  implicit val system = ActorSystem(Behaviors.empty, "AkkaHttpCirce")
+
+  val route: Route = (path("api" / "users") & post) {
+    entity(as[Person]) { person: Person =>
+      complete(UserAdded(UUID.randomUUID.toString, System.currentTimeMillis()))
+    }
+  }
+
+  def main(args: Array[String]): Unit = {
+    Http().newServerAt("localhost", 8765).bind(route)
   }
 
 }
