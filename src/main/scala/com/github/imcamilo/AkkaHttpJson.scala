@@ -23,7 +23,7 @@ trait PersonJsonProtocol extends DefaultJsonProtocol {
 }
 
 //spray 3
-object AkkaHttpJson extends PersonJsonProtocol with SprayJsonSupport {
+object AkkaHttpSpray extends PersonJsonProtocol with SprayJsonSupport {
 
   implicit val system = ActorSystem(Behaviors.empty, "AkkaHttpJSON")
 
