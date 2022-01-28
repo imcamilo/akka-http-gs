@@ -58,3 +58,20 @@ object AkkaHttpCirce extends FailFastCirceSupport {
   }
 
 }
+
+object AkkaHttpJackson extends JacksonSupport {
+
+  implicit val system = ActorSystem(Behaviors.empty, "AkkaHttpJackson")
+
+  val route: Route = (path("api" / "users") & post) {
+    entity(as[Person]) { person: Person =>
+      complete(UserAdded(UUID.randomUUID.toString, System.currentTimeMillis()))
+    }
+  }
+
+  def main(args: Array[String]): Unit = {
+    Http().newServerAt("localhost", 8764).bind(route)
+  }
+
+}
+
